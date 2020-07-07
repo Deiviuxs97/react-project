@@ -1,13 +1,20 @@
 import React, { Component } from "react";
 import classes from "./App.module.css";
 import Persons from "../components/Persons/Persons";
+import Cockpit from "../components/Cockpit/Cockpit";
+import withClass from "../hoc/withClass";
+import Aux from "../hoc/Auxiliary";
 
 interface eventC {
   alt?: boolean;
   target: HTMLInputElement;
 }
 
-class App extends Component {
+class App extends Component<{ appTitle: string }> {
+  constructor(props: Readonly<{ appTitle: string }>) {
+    super(props);
+    console.log("[App.tsx constructor]");
+  }
   state = {
     persons: [
       { id: "asd1", name: "Max", age: 28 },
@@ -16,7 +23,31 @@ class App extends Component {
     ],
     otherState: "some other value",
     showPersons: false,
+    showCockpit: true,
+    changeCounter: 0,
   };
+
+  static getDerivedStateFromProps(props: string, state: any) {
+    console.log("[App.tsx] getDerivedStateFromProps", props);
+    return state;
+  }
+
+  // componentWillMount() {
+  //   console.log("[App.tsx] componentWillMount");
+  // }
+
+  componentDidMount() {
+    console.log("[App.tsx] componentDidMount");
+  }
+
+  shouldComponentUpdate(nextProps: any, nextState: any) {
+    console.log("[App.tsx] shouldComponentUpdate");
+    return true;
+  }
+
+  componentDidUpdate() {
+    console.log("[App.tsx] componentDidUpdate");
+  }
 
   nameChangedHandler = (event: eventC, id: string) => {
     const personIndex = this.state.persons.findIndex((p) => {
@@ -32,7 +63,12 @@ class App extends Component {
     const persons = [...this.state.persons];
     persons[personIndex] = person;
 
-    this.setState({ persons: persons });
+    this.setState((prevState: any, props) => {
+      return {
+        persons: persons,
+        changeCounter: prevState.changeCounter + 1,
+      };
+    });
   };
 
   deletePersonHandler = (personIndex: number) => {
@@ -47,41 +83,40 @@ class App extends Component {
   };
 
   render() {
+    console.log("[App.tsx] render");
     let persons = null;
-    let btnClass = "";
 
     if (this.state.showPersons) {
       persons = (
-        <div>
-          <Persons
-            persons={this.state.persons}
-            clicked={this.deletePersonHandler}
-            changed={this.nameChangedHandler}
-          />
-        </div>
+        <Persons
+          persons={this.state.persons}
+          clicked={this.deletePersonHandler}
+          changed={this.nameChangedHandler}
+        />
       );
-      btnClass = classes.red;
-    }
-
-    let assignedClasses = [];
-    if (this.state.persons.length <= 2) {
-      assignedClasses.push(classes.red); // classes = ["red"]
-    }
-    if (this.state.persons.length <= 1) {
-      assignedClasses.push(classes.bold); // classes = ["red", "bold"]
     }
 
     return (
-      <div className={classes.App}>
-        <h1>Hi, I'm a React App</h1>
-        <p className={assignedClasses.join(" ")}>This is really working!</p>
-        <button className={btnClass} onClick={this.togglePersonsHandler}>
-          Toggle Persons
+      <Aux>
+        <button
+          onClick={() => {
+            this.setState({ showCockpit: false });
+          }}
+        >
+          Remove Cockpit
         </button>
+        {this.state.showCockpit ? (
+          <Cockpit
+            title={this.props.appTitle}
+            showPersons={this.state.showPersons}
+            personsLength={this.state.persons.length}
+            clicked={this.togglePersonsHandler}
+          />
+        ) : null}
         {persons}
-      </div>
+      </Aux>
     );
   }
 }
 
-export default App;
+export default withClass(App, classes.App);
