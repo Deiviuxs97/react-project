@@ -1,7 +1,6 @@
 import React, { Component } from "react";
-import classes from "./App.css";
-// import styled from "styled-components";
-import Person from "./Person/Person";
+import classes from "./App.module.css";
+import Persons from "../components/Persons/Persons";
 
 interface eventC {
   alt?: boolean;
@@ -33,13 +32,10 @@ class App extends Component {
     const persons = [...this.state.persons];
     persons[personIndex] = person;
 
-    // const person = Object.assign({}, this.state.persons[personIndex]);
-
     this.setState({ persons: persons });
   };
 
   deletePersonHandler = (personIndex: number) => {
-    // const persons = this.state.persons.slice();
     const persons = [...this.state.persons];
     persons.splice(personIndex, 1);
     this.setState({ persons: persons });
@@ -57,26 +53,14 @@ class App extends Component {
     if (this.state.showPersons) {
       persons = (
         <div>
-          {this.state.persons.map(
-            (
-              person: { id: string; name: string; age: number },
-              index: number
-            ) => {
-              return (
-                <Person
-                  click={() => this.deletePersonHandler(index)}
-                  name={person.name}
-                  age={person.age}
-                  key={person.id}
-                  changed={(event) => this.nameChangedHandler(event, person.id)}
-                />
-              );
-            }
-          )}
+          <Persons
+            persons={this.state.persons}
+            clicked={this.deletePersonHandler}
+            changed={this.nameChangedHandler}
+          />
         </div>
       );
-
-      btnClass = classes.Red;
+      btnClass = classes.red;
     }
 
     let assignedClasses = [];
@@ -91,10 +75,7 @@ class App extends Component {
       <div className={classes.App}>
         <h1>Hi, I'm a React App</h1>
         <p className={assignedClasses.join(" ")}>This is really working!</p>
-        <button
-          className={btnClass.join(" ")}
-          onClick={this.togglePersonsHandler}
-        >
+        <button className={btnClass} onClick={this.togglePersonsHandler}>
           Toggle Persons
         </button>
         {persons}
