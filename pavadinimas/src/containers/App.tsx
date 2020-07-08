@@ -11,6 +11,11 @@ interface eventC {
   target: HTMLInputElement;
 }
 
+interface sta {
+  changeCounter: number;
+  persons: [string, number];
+}
+
 class App extends Component<{ appTitle: string }> {
   constructor(props: Readonly<{ appTitle: string }>) {
     super(props);
@@ -29,7 +34,7 @@ class App extends Component<{ appTitle: string }> {
     authenticated: false,
   };
 
-  static getDerivedStateFromProps(props: string, state: any) {
+  static getDerivedStateFromProps(props: string, state: [string, number]) {
     console.log("[App.tsx] getDerivedStateFromProps", props);
     return state;
   }
@@ -65,7 +70,7 @@ class App extends Component<{ appTitle: string }> {
     const persons = [...this.state.persons];
     persons[personIndex] = person;
 
-    this.setState((prevState: any, props) => {
+    this.setState((prevState: sta, props) => {
       return {
         persons: persons,
         changeCounter: prevState.changeCounter + 1,

@@ -14,7 +14,6 @@ interface personProps {
   changed?: (event: React.ChangeEvent<HTMLInputElement>) => void;
   name: string;
   age: number;
-  inputElement?: React.RefObject<unknown>;
   isAuth: Readonly<personProps> & Readonly<{ children?: ReactNode }>;
 }
 
@@ -29,7 +28,7 @@ class Person extends Component<personProps> {
   };
   inputElementRef: any;
 
-  constructor(props: any) {
+  constructor(props: personProps) {
     super(props);
     this.inputElementRef = React.createRef();
   }

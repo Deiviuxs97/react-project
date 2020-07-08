@@ -1,3 +1,6 @@
-const aux = (props: any) => props.children;
+interface props {
+  children: any;
+}
+const aux = (props: props) => props.children;
 
 export default aux;

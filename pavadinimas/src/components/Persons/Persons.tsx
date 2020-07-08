@@ -4,9 +4,9 @@ import Person from "./Person/Person";
 interface props {
   clicked(index: number): void;
   changed(event: React.ChangeEvent<HTMLInputElement>, id: string): void;
-  persons: any;
+  // persons: [string, number];
   isAuthenticated: boolean;
-  // persons: { id: string; name: string; age: number }[];
+  persons: { id: string; name: string; age: number }[];
 }
 
 class Persons extends PureComponent<props> {
@@ -33,14 +33,14 @@ class Persons extends PureComponent<props> {
   //   //return ture;
   // }
 
-  getSnapshotBeforeUpdate(prevProps: any, prevState: any) {
+  getSnapshotBeforeUpdate(prevProps: props, prevState: props) {
     console.log("[Persons.tsx] getSnapshotBeforeUpdate");
     return { message: "Snapshot!" };
   }
 
   // componentWillUpdate() {}
 
-  componentDidUpdate(prevProps: any, prevState: any, snapshot: any) {
+  componentDidUpdate(prevProps: props, prevState: props, snapshot: props) {
     console.log("[Persons.tsx] componentDidUpdate");
     console.log(snapshot);
   }
