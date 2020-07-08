@@ -5,6 +5,7 @@ interface props {
   clicked(index: number): void;
   changed(event: React.ChangeEvent<HTMLInputElement>, id: string): void;
   persons: any;
+  isAuthenticated: boolean;
   // persons: { id: string; name: string; age: number }[];
 }
 

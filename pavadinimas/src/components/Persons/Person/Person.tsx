@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 import Aux from "../../../hoc/Auxiliary";
 import withClass from "../../../hoc/withClass";
 import classes from "./Person.module.css";
-import { Agent } from "http";
+import AuthContext from "../../../context/auth-context";
 
 interface personProps {
   click?:
@@ -15,6 +15,7 @@ interface personProps {
   name: string;
   age: number;
   inputElement?: React.RefObject<unknown>;
+  isAuth: Readonly<personProps> & Readonly<{ children?: ReactNode }>;
 }
 
 interface prop {}
@@ -30,12 +31,14 @@ class Person extends Component<personProps> {
 
   constructor(props: any) {
     super(props);
-    this.inputElement = React.createRef();
+    this.inputElementRef = React.createRef();
   }
 
+  static contextType = AuthContext;
   componentDidMount() {
     // this.inputElement.focus();
     this.inputElementRef.current.focus();
+    console.log(this.context.authenticated);
   }
   render() {
     console.log("[Person.tsx] rendering...");
@@ -46,6 +49,11 @@ class Person extends Component<personProps> {
     // }
     return (
       <Aux>
+        {this.context.authenticated ? (
+          <p>Authenticated</p>
+        ) : (
+          <p>Please log in</p>
+        )}
         <p key="i1" onClick={this.props.click}>
           I'm {this.props.name} and I am {this.props.age} years old!
         </p>
